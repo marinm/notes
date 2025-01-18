@@ -62,6 +62,25 @@
   </head>
   <body>
     <textarea id="notes" spellcheck="false"></textarea>
-    <script></script>
+    <script>
+      const textarea = document.querySelector("#notes");
+      const savedNotes = window.localStorage.getItem("notes") ?? "";
+
+      let lastSaved = Date.now();
+      let lastChanged = 0;
+
+      textarea.value = savedNotes;
+      textarea.addEventListener("input", () => (lastChanged = Date.now()));
+
+      function save() {
+        if (lastSaved > lastChanged) {
+          return;
+        }
+        window.localStorage.setItem("notes", textarea.value);
+        lastSaved = Date.now();
+      }
+
+      setInterval(save, 1000);
+    </script>
   </body>
 </html>
